@@ -1,31 +1,6 @@
 import { useState, useEffect } from "react";
-
-const Card = ({ data }) => {
-  return (
-    <div className="flex flex-col justify-start items-center grow h-96 w-52 mx-4 mt-2">
-      <div className="h-80 w-full flex flex-col items-center mb-2 cursor-pointer">
-        <img
-          src={data.images.jpg.image_url}
-          alt={data.title}
-          className="h-full w-full rounded-lg shadow-slate-800 shadow-md transition-opacity duration-300 ease-in-out hover:opacity-50"
-        />
-      </div>
-      <h3 className="text-xl text-white">
-        {data.title.split(" ", 3).join(" ")}
-      </h3>
-    </div>
-  );
-};
-
-const CardRow = ({ data }) => {
-  return (
-    <>
-      {data.map((item) => (
-        <Card key={item.mal_id} data={item} />
-      ))}
-    </>
-  );
-};
+import { CardRow } from "./Card"
+import { Controls } from "./Controls";
 
 export const Main = () => {
   const [anime, setAnime] = useState([]);
@@ -41,22 +16,11 @@ export const Main = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setSearchAnime(e.target.search.value);
+    setPage(1);
   };
 
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }
-
-  const handleNextPage = () => {
-    if (page < 1000){
-        setPage(page + 1);
-    }    
-  }
-
   return (
-    <main className="bg-slate-950 flex justify-center flex-col items-center">
+    <main className="bg-slate-950 flex justify-center flex-col items-center px-20">
       <div>
         <form action="" onSubmit={handleSearch} className="flex flex-row items-center mt-6">
           <input
@@ -80,18 +44,10 @@ export const Main = () => {
           </button>
         </form>
       </div>
-      <div className="animeSection flex flex-wrap mx-28 my-5">
+      <div className="animeSection flex flex-wrap mx-0 my-5 justify-center items-center">
         <CardRow title="Top Anime" data={anime} />
       </div>
-      <div className="flex mb-6 items-center">
-        <button className="mr-2" onClick={handlePreviousPage}>
-            <i className="bi bi-arrow-left-square-fill text-blue-700 text-4xl"></i>
-        </button>
-        <p className="mx-2 text-white text-3xl">{page}</p>
-        <button className="ml-2" onClick={handleNextPage}>
-            <i className="bi bi-arrow-right-square-fill text-blue-700 text-4xl"></i>
-        </button>
-      </div>
+      <Controls page={page} setPage={setPage} />      
     </main>
   );
 };
