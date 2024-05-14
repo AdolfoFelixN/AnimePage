@@ -6,11 +6,13 @@ export const Main = () => {
   const [anime, setAnime] = useState([]);
   const [searchAnime, setSearchAnime] = useState("");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`https://api.jikan.moe/v4/anime?q=${searchAnime}&sfw&page=${page}`)
       .then((res) => res.json())
       .then((data) => setAnime(data.data));
+      setLoading(false);
   }, [searchAnime, page]);
 
   const handleSearch = (e) => {
@@ -18,6 +20,14 @@ export const Main = () => {
     setSearchAnime(e.target.search.value);
     setPage(1);
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center bg-yellow-400">
+        <h1 className="text-3xl text-black">Loading content...</h1>
+      </div>
+    );
+  }
 
   return (
     <main className="bg-slate-950 flex justify-center flex-col items-center px-20">
